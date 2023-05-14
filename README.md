@@ -1,2 +1,2 @@
 # Resume-checker-
-App to check your plinkedin profile 
+App to check your linkedin profile 
