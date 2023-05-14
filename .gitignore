@@ -9,7 +9,10 @@ def get_profile_info(linkedin_username):
   headers = {
     "Authorization": "Bearer YOUR_ACCESS_TOKEN"
   }
-  response = requests.get(url, headers=headers)
+  params = {
+    "q": linkedin_username
+  }
+  response = requests.get(url, headers=headers, params=params)
 
   # Check the response status code.
   if response.status_code != 200:
@@ -40,10 +43,10 @@ def check_profile_for_errors(profile_info):
 def generate_keywords(profile_info):
   """Generates a list of keywords from the specified profile."""
 
-  keywords = []
+  keywords = set()
   for field in ["name", "headline", "summary", "skills", "experience"]:
     if isinstance(profile_info[field], str):
-      keywords.extend(profile_info[field].split())
+      keywords.update(profile_info[field].split())
 
   return keywords
 
@@ -83,31 +86,4 @@ def search_for_jobs(keywords, location):
   if response.status_code != 200:
     raise Exception("Error searching for jobs: {}".format(response.status_code))
 
-  # Parse the JSON response.
-  jobs = json.loads(response.content)
-
-  return jobs
-
-def connect_with_professionals(linkedin_username, keywords):
-  """Connects with professionals on LinkedIn who match the specified keywords."""
-
-  # Make a request to the LinkedIn API.
-  url = "https://api.linkedin.com/v2/people/search"
-  headers = {
-    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
-  }
-  data = {
-    "q": keywords
-  }
-  response = requests.post(url, headers=headers, data=data)
-
-  # Check the response status code.
-  if response.status_code != 200:
-    raise Exception("Error connecting with professionals: {}".format(response.status_code))
-
-  # Parse the JSON response.
-  professionals = json.loads(response.content)
-
-  for professional in professionals:
-    # Send a
-
+  # Parse the JSON response
